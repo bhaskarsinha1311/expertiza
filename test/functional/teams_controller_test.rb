@@ -1,0 +1,2 @@
+class Teams_Controller_Test
+end
