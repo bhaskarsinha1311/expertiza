@@ -82,14 +82,14 @@ class TeamsController < ApplicationController
     @team = Team.find(params[:id])
     course = Object.const_get(session[:team_type]).find(@team.parent_id)
     @team.destroy if @team
-    @signUps = SignedUpTeam.where(team_id: params[:id])
+    @sign_ups = SignedUpTeam.where(team_id: params[:id])
     
     @teams_users = TeamsUser.where(team_id: params[:id])
     @teams_users.destroy_all if @teams_users
 
-    if @signUps.size == 1 and @signUps.first.is_waitlisted == false #this team hold a topic
+    if @sign_ups.size == 1 and @sign_ups.first.is_waitlisted == false #this team hold a topic
     #if there is another team in waitlist, make this team hold this topic
-      topic_id = @signUps.first.topic_id
+      topic_id = @sign_ups.first.topic_id
       next_wait_listed_team = SignedUpTeam.where({:topic_id => topic_id, :is_waitlisted => true}).first
       #if slot exist, then confirm the topic for this team and delete all waitlists for this team
       if next_wait_listed_team
@@ -101,7 +101,7 @@ class TeamsController < ApplicationController
         Waitlist.cancel_all_waitlists(team_id, assignment_id)
       end
     end
-    @signUps.destroy_all if @signUps
+    @sign_ups.destroy_all if @sign_ups
     undo_link("Team \"#{@team.name}\" has been deleted successfully. ")
     redirect_to :action => 'list', :id => course.id
   end
