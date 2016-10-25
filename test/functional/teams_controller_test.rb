@@ -17,7 +17,7 @@ class Teams_Controller_Test < ActionController::TestCase
   	
    team = Team.find(params[:assignment1])
     
-    delete @team
+    delete team
     team = Team.find(params[:assignment1])
 
     assert_not team
